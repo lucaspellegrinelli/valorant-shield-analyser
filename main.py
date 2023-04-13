@@ -26,16 +26,29 @@ def main():
         df = scrap_data(name, tag, region, api)
         df = df[df["armor"] == "Heavy Shields"]
 
-        maybe_mattered = df[(df["mattered"] == ShieldMatter.MAYBE)]
-        yes_mattered = df[df["mattered"] == ShieldMatter.YES]
+        maybe_mattered_light = df[(df["mattered_light"] == ShieldMatter.MAYBE)]
+        yes_mattered_light = df[df["mattered_light"] == ShieldMatter.YES]
 
-        yes_prob = len(yes_mattered) / len(df) * 100
-        maybe_prob = len(maybe_mattered) / len(df) * 100
+        maybe_mattered_no = df[(df["mattered_no"] == ShieldMatter.MAYBE)]
+        yes_mattered_no = df[df["mattered_no"] == ShieldMatter.YES]
+
+        yes_prob_light = len(yes_mattered_light) / len(df) * 100
+        maybe_prob_light = len(maybe_mattered_light) / len(df) * 100
+
+        yes_prob_no = len(yes_mattered_no) / len(df) * 100
+        maybe_prob_no = len(maybe_mattered_no) / len(df) * 100
+
+        light_prob = 100 - (yes_prob_light + maybe_prob_light)
+        no_prob = 100 - (yes_prob_no + maybe_prob_no)
 
         print(f"{name}#{tag}")
-        print(f" - Total importou:\t\t{(yes_prob + maybe_prob):.2f}%")
-        print(f"   - Talvez importou:\t\t{maybe_prob:.2f}%")
-        print(f"   - Definitivamente importou:\t{yes_prob:.2f}%")
+        print(f" - Número de rounds com escudo cheio: {len(df)}")
+        print(
+            f" - {light_prob:.2f}% dos rounds o escudo leve teria o mesmo efeito do cheio"
+        )
+        print(
+            f" - {no_prob:.2f}% dos rounds ficar sem escudo não teria feito diferença"
+        )
         print("")
 
 
